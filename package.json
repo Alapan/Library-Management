@@ -1,0 +1,32 @@
+{
+  "name": "bookstore",
+  "version": "1.0.0",
+  "description": "Library management system",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "mongodb",
+    "mongoose",
+    "express",
+    "backbone",
+    "react"
+  ],
+  "author": "Alapan Mukherjee",
+  "license": "ISC",
+  "dependencies": {
+    "backbone": "^1.3.3",
+    "bootstrap": "^4.0.0-alpha.6",
+    "express": "^4.15.4",
+    "jquery": "^3.2.1",
+    "mongoose": "^4.11.6",
+    "tether": "^1.4.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "backbone.localstorage": "^2.0.0",
+    "nodemon": "^1.11.0"
+  }
+}
