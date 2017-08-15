@@ -3,10 +3,10 @@ const app = {};
 app.BookView = Backbone.View.extend({
   tagName: 'li',
 
-  template: _.template($('#app').html()),
+  template: _.template('<%= title %>'),
 
-  render: () => {
-    this.template(this.$el.html(this.model.toJSON()));
+  render: function () {
+    this.$el.html(this.template(this.model.toJSON()));
     return this;
   }
 });
@@ -24,15 +24,14 @@ app.BookList = Backbone.Collection.extend({
   localStorage: new Backbone.LocalStorage('BookList')
 });
 
-app.bookList = new app.BookList();
-
 
 app.AppView = Backbone.View.extend({
   el: '#app',
 
-  initialize: () => {
+  initialize: function () {
     this.input = this.$('#book-name');
-    app.bookList.on('change', this.addOneBook, this);
+    app.bookList = new app.BookList();
+    app.bookList.on('add', this.addOneBook, this);
     app.bookList.fetch();
   },
 
@@ -40,16 +39,16 @@ app.AppView = Backbone.View.extend({
     'keypress #book-name': 'createNewBookModel'
   },
 
-  addOneBook: (book) => {
-    console.log('BOOK: ', book);
+  addOneBook: function (book) {
     const b = new app.BookView({ model: book });
-    this.$('#bookList').append(b.render().el());
+    this.$('#bookList').append(b.render().el);
   },
 
-  createNewBookModel: (e) => {
+  createNewBookModel: function (e) {
   	if (e.which === 13) {
-  		e.preventDefault();
-  		app.bookList.create({ title: this.input.val().trim() });
+      e.preventDefault();
+      title = this.input.val().trim();
+      app.bookList.create({ title });
       this.input.val('');
   	}
   }
