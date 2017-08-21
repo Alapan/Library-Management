@@ -3,11 +3,11 @@ const Schema = mongoose.Schema;
 
 const BookSchema = new Schema({
   name: String,
-  author: [{
-  	type: Schema.Types.ObjectId,
-  	ref: 'Author',
-  }],
-  isdn: String,
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'Author'
+  },
+  isbn: String,
   summary: String
 });
 

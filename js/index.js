@@ -3,7 +3,7 @@ const app = {};
 app.BookView = Backbone.View.extend({
   tagName: 'li',
 
-  template: _.template('<%= title %>'),
+  template: _.template('<%= name %>'),
 
   render: function () {
     this.$el.html(this.template(this.model.toJSON()));
@@ -13,30 +13,27 @@ app.BookView = Backbone.View.extend({
 
 app.Book = Backbone.Model.extend({
   defaults: {
-  	title: ''
+    name: ''
   }
 });
 
 app.book = new app.Book();
 app.BookList = Backbone.Collection.extend({
   model: app.Book,
-  // For temp use, to be replaced with URL
-  localStorage: new Backbone.LocalStorage('BookList')
+  url: '/books'
 });
-
 
 app.AppView = Backbone.View.extend({
   el: '#app',
 
   initialize: function () {
-    this.input = this.$('#book-name');
     app.bookList = new app.BookList();
     app.bookList.on('add', this.addOneBook, this);
     app.bookList.fetch();
   },
 
   events: {
-    'keypress #book-name': 'createNewBookModel'
+    'submit #bookForm': 'createNewBookModel'
   },
 
   addOneBook: function (book) {
@@ -45,18 +42,19 @@ app.AppView = Backbone.View.extend({
   },
 
   createNewBookModel: function (e) {
-  	if (e.which === 13) {
-      e.preventDefault();
-      title = this.input.val().trim();
-      app.bookList.create({ title });
-      this.input.val('');
-  	}
+    e.preventDefault();
+    name = this.$('#bookName').val().trim();
+
+    if (name) {
+      app.bookList.fetch({
+        data: this.$('#bookForm').serialize(),
+        type: 'POST'
+      });
+    }
+
   }
 
 });
 
-
 app.appView = new app.AppView();
-
-
 

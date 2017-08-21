@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const BookCopySchema = new Schema({
   book: [{
-  	type: Schema.Types.ObjectId,
-  	ref: 'Book'
+    type: Schema.Types.ObjectId,
+    ref: 'Book'
   }],
   status: String,
   due_date: Date
