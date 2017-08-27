@@ -1,14 +1,28 @@
 import Backbone from 'backbone';
 import MainView from './views/main';
 
-const Router = Backbone.Router.extend({
+app.router = Backbone.Router.extend({
   routes: {
-  	'': 'home'
+    '': 'home',
+  	'add': 'addBook',
+  	'view': 'viewBooks'
+  },
+
+  initialize() {
+    this.view = new MainView();
   },
 
   home() {
-  	new MainView();
+    this.view.showTab('home');
+  },
+
+  addBook() {
+    this.view.showTab('add');
+  },
+
+  viewBooks() {
+  	this.view.showTab('list');
   }
 });
 
-export default Router;
+export default app.router;
