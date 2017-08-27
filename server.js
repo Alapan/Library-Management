@@ -12,7 +12,7 @@ app.listen(3000, () => {
 });
 
 app.use('/lib', express.static('lib'));
-app.use('/js', express.static('js'));
+app.use('/build', express.static('build'));
 
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
