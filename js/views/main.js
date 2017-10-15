@@ -1,39 +1,34 @@
 import Backbone from 'backbone';
-import BookList from '../collections/BookList';
-import Book from './Book';
+import AddBook from './AddBook';
+import ListBook from './ListBook';
+import HomeView from './HomeView';
 
 const MainView = Backbone.View.extend({
   el: '#app',
 
-  initialize: function () {
-    this.bookList = new BookList();
-    this.bookList.on('add', this.addOneBook, this);
-    this.bookList.fetch();
+  initialize() {
+    this.render();
   },
 
-  events: {
-    'submit #bookForm': 'createNewBookModel'
+  tabs: {
+    home: HomeView,
+    add: AddBook,
+    list: ListBook
   },
 
-  addOneBook: function (book) {
-    const b = new Book({ model: book });
-    this.$('#bookList').append(b.render().el);
+  showTab(tab) {
+    const view = this.tabs[tab];
+    this.childView = new view();
+    this.childView.setElement($('#content'));
+    this.childView.render();
   },
 
-  createNewBookModel: function (e) {
-    e.preventDefault();
-    name = this.$('#bookName').val().trim();
-
-    if (name) {
-      this.bookList.fetch({
-        data: this.$('#bookForm').serialize(),
-        type: 'POST'
-      });
-    }
-
+  render() {
+    $.get('templates/Header.html').then(function(data) {
+      const template = _.template(data, {});
+      $('#header').html(template);
+    });
   }
 });
 
 export default MainView;
-
-
