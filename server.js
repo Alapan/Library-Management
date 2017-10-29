@@ -22,40 +22,61 @@ app.use('/templates', express.static('templates'));
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 
+function createAndSaveBook(req, res, author) {
+  const book = new Book({
+    name: req.body.bookName,
+    author: author._id,
+    isbn: req.body.isbn,
+    summary: req.body.summary
+  });
+
+  book.save((err) => {
+    if (err) {
+      handleError(err);
+    }
+    res.send(book);
+  });
+}
+
+function handleError(err) {
+  const code = err.httpStatus || err.status || err.code || 500;
+  res.status(code).send(err.message);
+}
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/templates/index.html');
 });
 
 app.post('/books', (req,res) => {
-
   Book.findOne({ name: req.body.bookName })
   .then((book) => {
     if (!book) {
-      const author = new Author({
+      Author.findOne({
         first_name: req.body.firstName,
         last_name: req.body.lastName
-      });
+      }).exec().then((author) => {
 
-      author.save((err) => {
-        if (err) { return err };
+        if (!author) {
+          const author = new Author({
+            first_name: req.body.firstName,
+            last_name: req.body.lastName
+          });
 
-        const book = new Book({
-          name: req.body.bookName,
-          author: author._id,
-          isbn: req.body.isbn,
-          summary: req.body.summary
-        });
+          author.save((err) => {
+            if (err) { return err };
+            createAndSaveBook(req, res, author)
+          });
 
-        book.save((err) => {
-          if (err) { return err };
-          res.send(book);
-        });
+        } else {
+          createAndSaveBook(req, res, author);
+        }
+
       });
     } else {
       res.status(500).send('The book already exists!');
     }
   }, (err) => {
-    res.status(500).send('Something went wrong went reading books');
+    handleError(err);
   });
 });
 
@@ -65,6 +86,17 @@ app.get('/books', (req, res) => {
     res.send(books);
   }
   , (err) => {
-    console.log('Error in getting books: ', err.toString());
+    handleError(err);;
   });
 });
+
+app.delete('/books/:id', (req, res) => {
+  id = mongoose.Types.ObjectId(req.params.id);
+  Book.findOneAndRemove({ _id: id }).exec()
+  .then((book) => {
+    res.send(book);
+  }, (err) => {
+    handleError(err);
+  });
+});
+

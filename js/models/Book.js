@@ -5,6 +5,8 @@ const Book = Backbone.Model.extend({
     name: ''
   },
 
+  idAttribute: '_id',
+
   validate: function(attributes) {
     if (typeof(attributes.firstName) != 'string') {
       return 'First name is mandatory';
