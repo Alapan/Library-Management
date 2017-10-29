@@ -6,7 +6,7 @@ const BookView = Backbone.View.extend({
 
   template: _.template(`
     <td><%= name %></td>
-    <td><%= author %></td>
+    <td><%= author.first_name %> <%= author.last_name %></td>
   `),
 
   render: function () {

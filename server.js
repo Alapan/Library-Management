@@ -60,28 +60,11 @@ app.post('/books', (req,res) => {
 });
 
 app.get('/books', (req, res) => {
-  Book.find({}).lean().exec()
-  .then((dbBooks) => {
-    Promise.all(
-      dbBooks.map((book) => {
-        return Author.findOne({ _id: book.author }).exec()
-        .then((author) => {
-          book.author = author.first_name + ' ' + author.last_name;
-          return book;
-        }
-        , (err) => {
-          console.log('Error in reading author details: ', err.toString());
-        }
-      );
-    })).then((books) => {
-      res.send(books);
-    }
-    , (err) => {
-      console.log('Error in getting books: ', err.toString());
-    });
-  },
-  (err) => {
-    console.error(err.stack);
-    res.status(500).send('Something went wrong. Sorry!');
+  Book.find({}).populate('author').exec()
+  .then((books) => {
+    res.send(books);
+  }
+  , (err) => {
+    console.log('Error in getting books: ', err.toString());
   });
 });
