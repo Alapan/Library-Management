@@ -1,9 +1,9 @@
-import Backbone from 'backbone';
+import BaseView from './BaseView';
 import BookList from '../collections/BookList';
 import PNotify from 'pnotify/dist/es/PNotify.js';
 import PNotifyButtons from 'pnotify/dist/es/PNotifyButtons.js';
 
-const AddBook = Backbone.View.extend({
+const AddBook = BaseView.extend({
 
   events: {
     'click #post-book-data': 'postBookData'

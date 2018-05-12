@@ -9,7 +9,7 @@ var DEST_DIR = path.resolve(__dirname + '/build');
 module.exports = {
   entry: {
     main: [
-      SRC_DIR + '/views/main.js',
+      SRC_DIR + '/views/BaseView.js',
       SRC_DIR + '/index.js',
       __dirname + '/scss/main.scss'
     ],

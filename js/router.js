@@ -1,5 +1,8 @@
 import Backbone from 'backbone';
-import MainView from './views/main';
+import AddBook from './views/AddBook';
+import ListBook from './views/ListBook';
+import HomeView from './views/HomeView';
+import ContainerView from './views/ContainerView';
 
 app.router = Backbone.Router.extend({
   routes: {
@@ -9,19 +12,20 @@ app.router = Backbone.Router.extend({
   },
 
   initialize() {
-    this.view = new MainView();
+    this.session = {};
+    this.main = new ContainerView(this.session);
   },
 
   home() {
-    this.view.showTab('home');
+    this.main.showTab('home');
   },
 
   addBook() {
-    this.view.showTab('add');
+    this.main.showTab('add');
   },
 
   viewBooks() {
-    this.view.showTab('list');
+    this.main.showTab('list');
   }
 });
 

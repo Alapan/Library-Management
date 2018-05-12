@@ -1,6 +1,7 @@
-import Backbone from 'backbone';
+import BaseView from './BaseView';
 
-const HomeView = Backbone.View.extend({
+const HomeView = BaseView.extend({
+
   render() {
     const el = this.$el;
     $.get('templates/Home.html').then(function(data) {

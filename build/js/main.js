@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2001,7 +2001,7 @@
 
   return Backbone;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 1 */
@@ -13404,31 +13404,6 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = function () {
-	return this;
-}();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-/***/ }),
-/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13871,57 +13846,36 @@ let PNotify,
 //# sourceMappingURL=PNotify.js.map
 
 /***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = function () {
+	return this;
+}();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+/***/ }),
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AddBook__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ListBook__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__HomeView__ = __webpack_require__(12);
-
-
-
-
-
-const MainView = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
-  el: '#app',
-
-  initialize() {
-    this.render();
-  },
-
-  tabs: {
-    home: __WEBPACK_IMPORTED_MODULE_3__HomeView__["a" /* default */],
-    add: __WEBPACK_IMPORTED_MODULE_1__AddBook__["a" /* default */],
-    list: __WEBPACK_IMPORTED_MODULE_2__ListBook__["a" /* default */]
-  },
-
-  showTab(tab) {
-    const view = this.tabs[tab];
-    this.childView = new view();
-    this.childView.setElement($('#content'));
-    this.childView.render();
-  },
-
-  render() {
-    $.get('templates/Header.html').then(function (data) {
-      const template = _.template(data, {});
-      $('#header').html(template);
-    });
-  }
-});
-
-/* harmony default export */ __webpack_exports__["default"] = (MainView);
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_Book__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_Book__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_backbone__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_backbone__);
 
@@ -13935,7 +13889,7 @@ const BookList = __WEBPACK_IMPORTED_MODULE_1_backbone___default.a.Collection.ext
 /* harmony default export */ __webpack_exports__["a"] = (BookList);
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13968,31 +13922,61 @@ const Book = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Model.extend({
 /* harmony default export */ __webpack_exports__["a"] = (Book);
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(5);
-__webpack_require__(13);
-__webpack_require__(15);
+__webpack_require__(8);
+__webpack_require__(14);
 module.exports = __webpack_require__(16);
 
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
+
+
+const BaseView = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
+  el: '',
+
+  initialize(options) {
+    this.session = options;
+    this.render();
+  },
+
+  // Extend in subclass
+  tabs() {},
+
+  showTab(name) {
+    const tabs = this.tabs();
+    const view = tabs.tab[name];
+    this.childView = new view(this.session);
+    this.childView.setElement($(tabs.el));
+    this.childView.render();
+  }
+});
+
+/* harmony default export */ __webpack_exports__["default"] = (BaseView);
 
 /***/ }),
 /* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__collections_BookList__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_pnotify_dist_es_PNotifyButtons_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__collections_BookList__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_pnotify_dist_es_PNotifyButtons_js__ = __webpack_require__(10);
 
 
 
 
 
-const AddBook = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
+const AddBook = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
 
   events: {
     'click #post-book-data': 'postBookData'
@@ -14038,194 +14022,7 @@ const AddBook = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__collections_BookList__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_Book__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__BookView__ = __webpack_require__(11);
-
-
-
-
-
-const ListBook = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
-  initialize() {
-    this.bookList = new __WEBPACK_IMPORTED_MODULE_1__collections_BookList__["a" /* default */]();
-  },
-
-  render() {
-    const el = this.$el;
-    const self = this;
-
-    this.bookList.fetch().done(function () {
-      $.get('templates/BookList.html').then(data => {
-        const template = _.template(data, {});
-        el.html(template);
-
-        self.bookList.each(function (book) {
-          const bookView = new __WEBPACK_IMPORTED_MODULE_3__BookView__["a" /* default */]({ model: book });
-          $('#bookList').append(bookView.render().el);
-        });
-      });
-    });
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = (ListBook);
-
-/***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
-
-
-const BookView = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
-
-  tagName: 'tr',
-
-  initialize: function () {
-    this.listenTo(this.model, 'remove', this.removeView);
-  },
-
-  template: _.template(`
-    <td><%= name %></td>
-    <td>
-      <% if (author) { %>
-        <%= author.first_name %> <%= author.last_name %>
-      <% } %>
-    </td>
-    <td>
-      <button class="btn btn-sm btn-danger delete-btn">
-        Delete
-      </button>
-    </td>
-  `),
-
-  events: {
-    'click .delete-btn': 'deleteBook'
-  },
-
-  deleteBook: function (e) {
-    e.preventDefault();
-    this.model.destroy();
-  },
-
-  removeView: function () {
-    this.remove();
-  },
-
-  render: function () {
-    this.$el.html(this.template(this.model.toJSON()));
-    return this;
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = (BookView);
-
-/***/ }),
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
-
-
-const HomeView = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
-  render() {
-    const el = this.$el;
-    $.get('templates/Home.html').then(function (data) {
-      const template = _.template(data, {});
-      el.html(template);
-    });
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = (HomeView);
-
-/***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router__ = __webpack_require__(14);
-
-
-
-
-__WEBPACK_IMPORTED_MODULE_1_jquery___default()(function () {
-  new __WEBPACK_IMPORTED_MODULE_2__router__["a" /* default */]();
-  __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.history.start();
-});
-
-/***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_main__ = __webpack_require__(5);
-
-
-
-app.router = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Router.extend({
-  routes: {
-    '': 'home',
-    'add': 'addBook',
-    'view': 'viewBooks'
-  },
-
-  initialize() {
-    this.view = new __WEBPACK_IMPORTED_MODULE_1__views_main__["default"]();
-  },
-
-  home() {
-    this.view.showTab('home');
-  },
-
-  addBook() {
-    this.view.showTab('add');
-  },
-
-  viewBooks() {
-    this.view.showTab('list');
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = (app.router);
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__PNotify_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__PNotify_js__ = __webpack_require__(3);
 function _showSticker({ sticker: t, _notice: e }) {
   return t && !(e && e.refs.elem.classList.contains("nonblock"));
 }function _showCloser({ closer: t, _notice: e }) {
@@ -14359,6 +14156,231 @@ function _showSticker({ sticker: t, _notice: e }) {
   (t.sticker || t._notice) && this._differs(e._showSticker, e._showSticker = _showSticker(e)) && (t._showSticker = !0), (t.closer || t._notice) && this._differs(e._showCloser, e._showCloser = _showCloser(e)) && (t._showCloser = !0), (t.classes || t._notice) && (this._differs(e._pinUpClass, e._pinUpClass = _pinUpClass(e)) && (t._pinUpClass = !0), this._differs(e._pinDownClass, e._pinDownClass = _pinDownClass(e)) && (t._pinDownClass = !0), this._differs(e._closerClass, e._closerClass = _closerClass(e)) && (t._closerClass = !0));
 }, setup(PNotifyButtons);/* unused harmony default export */ var _unused_webpack_default_export = (PNotifyButtons);
 //# sourceMappingURL=PNotifyButtons.js.map
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__collections_BookList__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_Book__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__BookView__ = __webpack_require__(12);
+
+
+
+
+
+const ListBook = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
+  initialize(options) {
+    this.bookList = new __WEBPACK_IMPORTED_MODULE_1__collections_BookList__["a" /* default */]();
+    this.constructor.__super__.initialize.call(this, options);
+  },
+
+  render() {
+    const el = this.$el;
+    const self = this;
+
+    this.bookList.fetch().done(function () {
+      $.get('templates/BookList.html').then(data => {
+        const template = _.template(data, {});
+        el.html(template);
+
+        self.bookList.each(function (book) {
+          const bookView = new __WEBPACK_IMPORTED_MODULE_3__BookView__["a" /* default */]({ model: book });
+          $('#bookList').append(bookView.render().el);
+        });
+      });
+    });
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (ListBook);
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
+
+
+const BookView = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
+
+  tagName: 'tr',
+
+  initialize: function () {
+    this.listenTo(this.model, 'remove', this.removeView);
+  },
+
+  template: _.template(`
+    <td><%= name %></td>
+    <td>
+      <% if (author) { %>
+        <%= author.first_name %> <%= author.last_name %>
+      <% } %>
+    </td>
+    <td>
+      <button class="btn btn-sm btn-danger delete-btn">
+        Delete
+      </button>
+    </td>
+  `),
+
+  events: {
+    'click .delete-btn': 'deleteBook'
+  },
+
+  deleteBook: function (e) {
+    e.preventDefault();
+    this.model.destroy();
+  },
+
+  removeView: function () {
+    this.remove();
+  },
+
+  render: function () {
+    this.$el.html(this.template(this.model.toJSON()));
+    return this;
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (BookView);
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(8);
+
+
+const HomeView = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
+
+  render() {
+    const el = this.$el;
+    $.get('templates/Home.html').then(function (data) {
+      const template = _.template(data, {});
+      el.html(template);
+    });
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (HomeView);
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router__ = __webpack_require__(15);
+
+
+
+
+__WEBPACK_IMPORTED_MODULE_1_jquery___default()(function () {
+  new __WEBPACK_IMPORTED_MODULE_2__router__["a" /* default */]();
+  __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.history.start();
+});
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_AddBook__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_ListBook__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_HomeView__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_ContainerView__ = __webpack_require__(21);
+
+
+
+
+
+
+app.router = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Router.extend({
+  routes: {
+    '': 'home',
+    'add': 'addBook',
+    'view': 'viewBooks'
+  },
+
+  initialize() {
+    this.session = {};
+    this.main = new __WEBPACK_IMPORTED_MODULE_4__views_ContainerView__["a" /* default */](this.session);
+  },
+
+  home() {
+    this.main.showTab('home');
+  },
+
+  addBook() {
+    this.main.showTab('add');
+  },
+
+  viewBooks() {
+    this.main.showTab('list');
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (app.router);
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AddBook__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ListBook__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__HomeView__ = __webpack_require__(13);
+
+
+
+
+
+const ContainerView = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
+  el: '#app',
+
+  tabs() {
+    return {
+      el: '#content',
+      tab: {
+        home: __WEBPACK_IMPORTED_MODULE_3__HomeView__["a" /* default */],
+        add: __WEBPACK_IMPORTED_MODULE_1__AddBook__["a" /* default */],
+        list: __WEBPACK_IMPORTED_MODULE_2__ListBook__["a" /* default */]
+      }
+    };
+  },
+
+  render() {
+    $.get('templates/Header.html').then(function (data) {
+      const template = _.template(data, {});
+      $('#header').html(template);
+    });
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (ContainerView);
 
 /***/ })
 /******/ ]);

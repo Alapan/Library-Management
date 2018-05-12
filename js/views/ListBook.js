@@ -1,11 +1,12 @@
-import Backbone from 'backbone';
+import BaseView from './BaseView';
 import BookList from '../collections/BookList';
 import Book from '../models/Book';
 import BookView from './BookView';
 
-const ListBook = Backbone.View.extend({
-  initialize() {
+const ListBook = BaseView.extend({
+  initialize(options) {
     this.bookList = new BookList();
+    this.constructor.__super__.initialize.call(this, options);
   },
 
   render() {
