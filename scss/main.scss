@@ -3,8 +3,9 @@ html {
 }
 
 .header {
-  height: 80px;
-  line-height: 80px;
+  height: 70px;
+  line-height: 70px;
+  margin-bottom: 0;
   text-align: center;
   background: #EAE5E4;
   font-family: "Comic Sans MS", sans-serif;
@@ -18,4 +19,20 @@ html {
 .delete-btn {
   margin: 0 auto;
   display: block;
+}
+
+.mainmenu {
+  list-style-type: none;
+  height: 28px;
+  line-height: 28px;
+  background: #B9DCE2;
+
+  li {
+    float: left;
+    margin: 0 5px 10px 5px;
+
+    a {
+      font-family: "Comic Sans MS", sans-serif;
+    }
+  }
 }

@@ -1,5 +1,7 @@
 import Backbone from 'backbone';
 import BookList from '../collections/BookList';
+import PNotify from 'pnotify/dist/es/PNotify.js';
+import PNotifyButtons from 'pnotify/dist/es/PNotifyButtons.js';
 
 const AddBook = Backbone.View.extend({
 
@@ -14,7 +16,19 @@ const AddBook = Backbone.View.extend({
     if (name) {
       bookList.fetch({
         data: this.$('#bookForm').serialize(),
-        type: 'POST'
+        type: 'POST',
+        success: () => {
+          PNotify.success({
+            title: 'Add book',
+            text: 'Book added successfully'
+          });
+        },
+        error: () => {
+          PNotify.error({
+            title: 'Error',
+            text: 'Error: Book could not be added'
+          })
+        }
       });
     }
   },
