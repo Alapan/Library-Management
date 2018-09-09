@@ -17,8 +17,7 @@ module.exports = {
       'underscore',
       'tether',
       'bootstrap',
-      'backbone',
-      'pnotify'
+      'backbone'
     ]
   },
   output: {

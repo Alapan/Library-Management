@@ -1,5 +1,11 @@
 const Book = require('../models/Book');
 const Author = require('../models/Author');
+const mongoose = require('mongoose');
+
+mongoose.connect(
+  'mongodb://127.0.0.1/test',
+  { useMongoClient: true }
+);
 
 function createAndSaveBook(req, res, author) {
   const book = new Book({

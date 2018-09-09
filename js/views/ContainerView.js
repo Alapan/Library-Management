@@ -2,6 +2,7 @@ import BaseView from './BaseView';
 import AddBook from './AddBook';
 import ListBook from './ListBook';
 import HomeView from './HomeView';
+import AddUser from './AddUser';
 
 const ContainerView = BaseView.extend({
   el: '#app',
@@ -11,8 +12,9 @@ const ContainerView = BaseView.extend({
       el: '#content',
       tab: {
         home: HomeView,
-        add: AddBook,
-        list: ListBook
+        addBook: AddBook,
+        list: ListBook,
+        addUser: AddUser
       }
     }
   },

@@ -8,7 +8,8 @@ app.router = Backbone.Router.extend({
   routes: {
     '': 'home',
     'add': 'addBook',
-    'view': 'viewBooks'
+    'view': 'viewBooks',
+    'user': 'addUser'
   },
 
   initialize() {
@@ -21,11 +22,15 @@ app.router = Backbone.Router.extend({
   },
 
   addBook() {
-    this.main.showTab('add');
+    this.main.showTab('addBook');
   },
 
   viewBooks() {
     this.main.showTab('list');
+  },
+
+  addUser() {
+    this.main.showTab('addUser');
   }
 });
 

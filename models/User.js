@@ -1,12 +1,20 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const crypto = require('crypto');
 
-const UserSchema = new Schema({
+const userSchema = new Schema({
   email: {
     type: String,
-    unique: true,
+    lowercase: true,
     required: true,
-    lowercase: true
+    unique: true,
+    trim: true,
+    validate: {
+      validator: function (email) {
+        return /@/.test(email);
+      },
+      message: (email) => `${email} is not valid!`
+    }
   },
   password: {
     type: String,
@@ -14,5 +22,10 @@ const UserSchema = new Schema({
   }
 });
 
-const User = mongoose.model('User', UserSchema);
+userSchema.pre('save', function(next) {
+  this.password = crypto.createHash('sha256').update(this.password).digest('base64');
+  next();
+});
+
+const User = mongoose.model('User', userSchema);
 module.exports = User;

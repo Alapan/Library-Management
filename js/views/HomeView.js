@@ -1,5 +1,7 @@
-import BaseView from './BaseView';
 const _ = require('lodash');
+import BaseView from './BaseView';
+import PNotify from 'pnotify/dist/es/PNotify.js';
+
 
 const HomeView = BaseView.extend({
 
@@ -26,8 +28,11 @@ const HomeView = BaseView.extend({
       success: (data) => {
         console.log('DATA: ', data);
       },
-      error: (err) => {
-        console.log('ERROR: ', err.message);
+      error: () => {
+        PNotify.error({
+          title: 'Authentication failed',
+          text: 'Username or password is incorrect'
+        })
       }
     })
 

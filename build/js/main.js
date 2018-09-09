@@ -82,7 +82,7 @@
 
   // Set up Backbone appropriately for the environment. Start with AMD.
   if (true) {
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(2), __webpack_require__(3), exports], __WEBPACK_AMD_DEFINE_RESULT__ = function (_, $, exports) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(3), __webpack_require__(4), exports], __WEBPACK_AMD_DEFINE_RESULT__ = function (_, $, exports) {
       // Export global even in AMD case in case this script is loaded with
       // others that may still expect a global Backbone.
       root.Backbone = factory(root, exports, _, $);
@@ -2001,7 +2001,7 @@
 
   return Backbone;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 1 */
@@ -2037,6 +2037,31 @@ const BaseView = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = function () {
+	return this;
+}();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -3605,7 +3630,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscor
 }).call(this);
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -13435,11 +13460,114 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 });
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__collections_BookList__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__ = __webpack_require__(8);
+
+
+
+
+const AddBook = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
+
+  events: {
+    'click #post-book-data': 'postBookData'
+  },
+
+  postBookData(e) {
+    e.preventDefault();
+    const bookList = new __WEBPACK_IMPORTED_MODULE_1__collections_BookList__["a" /* default */]();
+    const name = this.$('#bookName').val().trim();
+    if (name) {
+      bookList.fetch({
+        data: this.$('#bookForm').serialize(),
+        type: 'POST',
+        success: () => {
+          __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__["a" /* default */].success({
+            title: 'Add book',
+            text: 'Book added successfully'
+          });
+        },
+        error: () => {
+          __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__["a" /* default */].error({
+            title: 'Error',
+            text: 'Error: Book could not be added'
+          });
+        }
+      });
+    }
+  },
+
+  render() {
+    const el = this.$el;
+    $.get('templates/AddBook.html').then(function (data) {
+      const template = _.template(data, {});
+      el.html(template);
+    });
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (AddBook);
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_Book__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_backbone__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_backbone__);
+
+
+
+const BookList = __WEBPACK_IMPORTED_MODULE_1_backbone___default.a.Collection.extend({
+  model: __WEBPACK_IMPORTED_MODULE_0__models_Book__["a" /* default */],
+  url: '/books'
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (BookList);
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
+
+
+const Book = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Model.extend({
+  defaults: {
+    name: ''
+  },
+
+  idAttribute: '_id',
+
+  validate: function (attributes) {
+    if (typeof attributes.firstName != 'string') {
+      return 'First name is mandatory';
+    }
+
+    if (typeof attributes.lastName != 'string') {
+      return 'Last name is mandatory';
+    }
+
+    if (typeof attributes.bookName != 'string') {
+      return 'Please enter a valid book name';
+    }
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (Book);
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 let PNotify,
     posTimer,
     onDocumentLoaded = () => {
@@ -13874,139 +14002,8 @@ let PNotify,
   t.u(), t.d(), e[t.key] = null;
 }assign(PNotify_1.prototype, { destroy: destroy, get: get, fire: fire, on: on, set: set, _set: _set, _mount: _mount, _unmount: _unmount, _differs: _differs }), assign(PNotify_1.prototype, methods), PNotify_1.prototype._recompute = function (t, e) {
   t.styling && this._differs(e._styles, e._styles = _styles(e)) && (t._styles = !0), t.icons && this._differs(e._icons, e._icons = _icons(e)) && (t._icons = !0), t.width && this._differs(e._widthStyle, e._widthStyle = _widthStyle(e)) && (t._widthStyle = !0), t.minHeight && this._differs(e._minHeightStyle, e._minHeightStyle = _minHeightStyle(e)) && (t._minHeightStyle = !0);
-}, setup(PNotify_1);/* harmony default export */ __webpack_exports__["default"] = (PNotify_1);
+}, setup(PNotify_1);/* harmony default export */ __webpack_exports__["a"] = (PNotify_1);
 //# sourceMappingURL=PNotify.js.map
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = function () {
-	return this;
-}();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__collections_BookList__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_pnotify_dist_es_PNotifyButtons_js__ = __webpack_require__(14);
-
-
-
-
-
-const AddBook = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
-
-  events: {
-    'click #post-book-data': 'postBookData'
-  },
-
-  postBookData(e) {
-    e.preventDefault();
-    const bookList = new __WEBPACK_IMPORTED_MODULE_1__collections_BookList__["a" /* default */]();
-    const name = this.$('#bookName').val().trim();
-    if (name) {
-      bookList.fetch({
-        data: this.$('#bookForm').serialize(),
-        type: 'POST',
-        success: () => {
-          __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__["default"].success({
-            title: 'Add book',
-            text: 'Book added successfully'
-          });
-        },
-        error: () => {
-          __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__["default"].error({
-            title: 'Error',
-            text: 'Error: Book could not be added'
-          });
-        }
-      });
-    }
-  },
-
-  render() {
-    const el = this.$el;
-    $.get('templates/AddBook.html').then(function (data) {
-      const template = _.template(data, {});
-      el.html(template);
-    }, 'html');
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = (AddBook);
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_Book__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_backbone__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_backbone__);
-
-
-
-const BookList = __WEBPACK_IMPORTED_MODULE_1_backbone___default.a.Collection.extend({
-  model: __WEBPACK_IMPORTED_MODULE_0__models_Book__["a" /* default */],
-  url: '/books'
-});
-
-/* harmony default export */ __webpack_exports__["a"] = (BookList);
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
-
-
-const Book = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Model.extend({
-  defaults: {
-    name: ''
-  },
-
-  idAttribute: '_id',
-
-  validate: function (attributes) {
-    if (typeof attributes.firstName != 'string') {
-      return 'First name is mandatory';
-    }
-
-    if (typeof attributes.lastName != 'string') {
-      return 'Last name is mandatory';
-    }
-
-    if (typeof attributes.bookName != 'string') {
-      return 'Please enter a valid book name';
-    }
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = (Book);
 
 /***/ }),
 /* 9 */
@@ -14014,9 +14011,9 @@ const Book = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Model.extend({
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__collections_BookList__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_Book__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__BookView__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__collections_BookList__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_Book__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__BookView__ = __webpack_require__(14);
 
 
 
@@ -14054,8 +14051,10 @@ const ListBook = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_pnotify_dist_es_PNotify_js__ = __webpack_require__(8);
+const _ = __webpack_require__(15);
 
-const _ = __webpack_require__(22);
+
 
 const HomeView = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
 
@@ -14082,8 +14081,11 @@ const HomeView = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
       success: data => {
         console.log('DATA: ', data);
       },
-      error: err => {
-        console.log('ERROR: ', err.message);
+      error: () => {
+        __WEBPACK_IMPORTED_MODULE_1_pnotify_dist_es_PNotify_js__["a" /* default */].error({
+          title: 'Authentication failed',
+          text: 'Username or password is incorrect'
+        });
       }
     });
   },
@@ -14113,7 +14115,7 @@ const HomeView = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
 
 __webpack_require__(1);
 __webpack_require__(12);
-module.exports = __webpack_require__(17);
+module.exports = __webpack_require__(19);
 
 
 /***/ }),
@@ -14124,7 +14126,7 @@ module.exports = __webpack_require__(17);
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router__ = __webpack_require__(13);
 
@@ -14143,10 +14145,10 @@ __WEBPACK_IMPORTED_MODULE_1_jquery___default()(function () {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_AddBook__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_AddBook__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_ListBook__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_HomeView__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_ContainerView__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_ContainerView__ = __webpack_require__(17);
 
 
 
@@ -14157,7 +14159,8 @@ app.router = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Router.extend({
   routes: {
     '': 'home',
     'add': 'addBook',
-    'view': 'viewBooks'
+    'view': 'viewBooks',
+    'user': 'addUser'
   },
 
   initialize() {
@@ -14170,11 +14173,15 @@ app.router = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Router.extend({
   },
 
   addBook() {
-    this.main.showTab('add');
+    this.main.showTab('addBook');
   },
 
   viewBooks() {
     this.main.showTab('list');
+  },
+
+  addUser() {
+    this.main.showTab('addUser');
   }
 });
 
@@ -14182,146 +14189,6 @@ app.router = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Router.extend({
 
 /***/ }),
 /* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__PNotify_js__ = __webpack_require__(4);
-function _showSticker({ sticker: t, _notice: e }) {
-  return t && !(e && e.refs.elem.classList.contains("nonblock"));
-}function _showCloser({ closer: t, _notice: e }) {
-  return t && !(e && e.refs.elem.classList.contains("nonblock"));
-}function _pinUpClass({ classes: t, _notice: e }) {
-  return e ? null === t.pinUp ? e.get()._icons.pinUp : t.pinUp : "";
-}function _pinDownClass({ classes: t, _notice: e }) {
-  return e ? null === t.pinDown ? e.get()._icons.pinDown : t.pinDown : "";
-}function _closerClass({ classes: t, _notice: e }) {
-  return e ? null === t.closer ? e.get()._icons.closer : t.closer : "";
-}function data() {
-  return Object.assign({ _notice: null, _options: {}, _mouseIsIn: !1 }, __WEBPACK_IMPORTED_MODULE_0__PNotify_js__["default"].modules.Buttons.defaults);
-}var methods = { initModule(t) {
-    this.set(t);const { _notice: e } = this.get();e.on("mouseenter", () => this.set({ _mouseIsIn: !0 })), e.on("mouseleave", () => this.set({ _mouseIsIn: !1 })), e.on("state", ({ changed: t, current: e }) => {
-      if (!t.hide) return;const { sticker: s } = this.get();if (!s) return;const n = e.hide ? this.get().classes.pinUp : this.get().classes.pinDown;("fontawesome5" === this.get()._notice.get().icons || "string" == typeof n && n.match(/(^| )fa[srlb]($| )/)) && (this.set({ sticker: !1 }), this.set({ sticker: !0 }));
-    });
-  }, handleStickerClick() {
-    const { _notice: t } = this.get();t.update({ hide: !t.get().hide });
-  }, handleCloserClick() {
-    this.get()._notice.close(!1), this.set({ _mouseIsIn: !1 });
-  } };function oncreate() {
-  this.fire("init", { module: this });
-}function setup(t) {
-  t.key = "Buttons", t.defaults = { closer: !0, closerHover: !0, sticker: !0, stickerHover: !0, labels: { close: "Close", stick: "Stick", unstick: "Unstick" }, classes: { closer: null, pinUp: null, pinDown: null } }, __WEBPACK_IMPORTED_MODULE_0__PNotify_js__["default"].modules.Buttons = t, __WEBPACK_IMPORTED_MODULE_0__PNotify_js__["default"].modulesPrependContainer.push(t), Object.assign(__WEBPACK_IMPORTED_MODULE_0__PNotify_js__["default"].icons.brighttheme, { closer: "brighttheme-icon-closer", pinUp: "brighttheme-icon-sticker", pinDown: "brighttheme-icon-sticker brighttheme-icon-stuck" }), Object.assign(__WEBPACK_IMPORTED_MODULE_0__PNotify_js__["default"].icons.bootstrap3, { closer: "glyphicon glyphicon-remove", pinUp: "glyphicon glyphicon-pause", pinDown: "glyphicon glyphicon-play" }), Object.assign(__WEBPACK_IMPORTED_MODULE_0__PNotify_js__["default"].icons.fontawesome4, { closer: "fa fa-times", pinUp: "fa fa-pause", pinDown: "fa fa-play" }), Object.assign(__WEBPACK_IMPORTED_MODULE_0__PNotify_js__["default"].icons.fontawesome5, { closer: "fas fa-times", pinUp: "fas fa-pause", pinDown: "fas fa-play" });
-}function add_css() {
-  var t = createElement("style");t.id = "svelte-1yjle82-style", t.textContent = ".ui-pnotify-closer.svelte-1yjle82,.ui-pnotify-sticker.svelte-1yjle82{float:right;margin-left:.5em;cursor:pointer}[dir=rtl] .ui-pnotify-closer,[dir=rtl] .ui-pnotify-sticker{float:left;margin-right:.5em;margin-left:0}.ui-pnotify-buttons-hidden.svelte-1yjle82{visibility:hidden}", appendNode(t, document.head);
-}function create_main_fragment(t, e) {
-  var s,
-      n,
-      i = e._showCloser && create_if_block(t, e),
-      o = e._showSticker && create_if_block_1(t, e);return { c: function () {
-      i && i.c(), s = createText("\n"), o && o.c(), n = createComment();
-    }, m: function (t, e) {
-      i && i.m(t, e), insertNode(s, t, e), o && o.m(t, e), insertNode(n, t, e);
-    }, p: function (e, r) {
-      r._showCloser ? i ? i.p(e, r) : ((i = create_if_block(t, r)).c(), i.m(s.parentNode, s)) : i && (i.u(), i.d(), i = null), r._showSticker ? o ? o.p(e, r) : ((o = create_if_block_1(t, r)).c(), o.m(n.parentNode, n)) : o && (o.u(), o.d(), o = null);
-    }, u: function () {
-      i && i.u(), detachNode(s), o && o.u(), detachNode(n);
-    }, d: function () {
-      i && i.d(), o && o.d();
-    } };
-}function create_if_block(t, e) {
-  var s, n, i, o, r;function c(e) {
-    t.handleCloserClick();
-  }return { c: function () {
-      s = createElement("div"), n = createElement("span"), this.h();
-    }, h: function () {
-      n.className = i = e._closerClass + " svelte-1yjle82", addListener(s, "click", c), s.className = o = "ui-pnotify-closer " + (!e.closerHover || e._mouseIsIn ? "" : "ui-pnotify-buttons-hidden") + " svelte-1yjle82", setAttribute(s, "role", "button"), s.tabIndex = "0", s.title = r = e.labels.close;
-    }, m: function (t, e) {
-      insertNode(s, t, e), appendNode(n, s);
-    }, p: function (t, e) {
-      t._closerClass && i !== (i = e._closerClass + " svelte-1yjle82") && (n.className = i), (t.closerHover || t._mouseIsIn) && o !== (o = "ui-pnotify-closer " + (!e.closerHover || e._mouseIsIn ? "" : "ui-pnotify-buttons-hidden") + " svelte-1yjle82") && (s.className = o), t.labels && r !== (r = e.labels.close) && (s.title = r);
-    }, u: function () {
-      detachNode(s);
-    }, d: function () {
-      removeListener(s, "click", c);
-    } };
-}function create_if_block_1(t, e) {
-  var s, n, i, o, r, c;function l(e) {
-    t.handleStickerClick();
-  }return { c: function () {
-      s = createElement("div"), n = createElement("span"), this.h();
-    }, h: function () {
-      n.className = i = (e._options.hide ? e._pinUpClass : e._pinDownClass) + " svelte-1yjle82", addListener(s, "click", l), s.className = o = "ui-pnotify-sticker " + (!e.stickerHover || e._mouseIsIn ? "" : "ui-pnotify-buttons-hidden") + " svelte-1yjle82", setAttribute(s, "role", "button"), setAttribute(s, "aria-pressed", r = e._options.hide), s.tabIndex = "0", s.title = c = e._options.hide ? e.labels.stick : e.labels.unstick;
-    }, m: function (t, e) {
-      insertNode(s, t, e), appendNode(n, s);
-    }, p: function (t, e) {
-      (t._options || t._pinUpClass || t._pinDownClass) && i !== (i = (e._options.hide ? e._pinUpClass : e._pinDownClass) + " svelte-1yjle82") && (n.className = i), (t.stickerHover || t._mouseIsIn) && o !== (o = "ui-pnotify-sticker " + (!e.stickerHover || e._mouseIsIn ? "" : "ui-pnotify-buttons-hidden") + " svelte-1yjle82") && (s.className = o), t._options && r !== (r = e._options.hide) && setAttribute(s, "aria-pressed", r), (t._options || t.labels) && c !== (c = e._options.hide ? e.labels.stick : e.labels.unstick) && (s.title = c);
-    }, u: function () {
-      detachNode(s);
-    }, d: function () {
-      removeListener(s, "click", l);
-    } };
-}function PNotifyButtons(t) {
-  init(this, t), this._state = assign(data(), t.data), this._recompute({ sticker: 1, _notice: 1, closer: 1, classes: 1 }, this._state), document.getElementById("svelte-1yjle82-style") || add_css(), t.root || (this._oncreate = []), this._fragment = create_main_fragment(this, this._state), this.root._oncreate.push(() => {
-    oncreate.call(this), this.fire("update", { changed: assignTrue({}, this._state), current: this._state });
-  }), t.target && (this._fragment.c(), this._mount(t.target, t.anchor), callAll(this._oncreate));
-}function createElement(t) {
-  return document.createElement(t);
-}function appendNode(t, e) {
-  e.appendChild(t);
-}function createText(t) {
-  return document.createTextNode(t);
-}function createComment() {
-  return document.createComment("");
-}function insertNode(t, e, s) {
-  e.insertBefore(t, s);
-}function detachNode(t) {
-  t.parentNode.removeChild(t);
-}function addListener(t, e, s) {
-  t.addEventListener(e, s, !1);
-}function setAttribute(t, e, s) {
-  t.setAttribute(e, s);
-}function removeListener(t, e, s) {
-  t.removeEventListener(e, s, !1);
-}function init(t, e) {
-  t._handlers = blankObject(), t._bind = e._bind, t.options = e, t.root = e.root || t, t.store = t.root.store || e.store;
-}function assign(t, e) {
-  for (var s in e) t[s] = e[s];return t;
-}function assignTrue(t, e) {
-  for (var s in e) t[s] = 1;return t;
-}function callAll(t) {
-  for (; t && t.length;) t.shift()();
-}function destroy(t) {
-  this.destroy = noop, this.fire("destroy"), this.set = noop, !1 !== t && this._fragment.u(), this._fragment.d(), this._fragment = null, this._state = {};
-}function get() {
-  return this._state;
-}function fire(t, e) {
-  var s = t in this._handlers && this._handlers[t].slice();if (s) for (var n = 0; n < s.length; n += 1) {
-    var i = s[n];i.__calling || (i.__calling = !0, i.call(this, e), i.__calling = !1);
-  }
-}function on(t, e) {
-  var s = this._handlers[t] || (this._handlers[t] = []);return s.push(e), { cancel: function () {
-      var t = s.indexOf(e);~t && s.splice(t, 1);
-    } };
-}function set(t) {
-  this._set(assign({}, t)), this.root._lock || (this.root._lock = !0, callAll(this.root._beforecreate), callAll(this.root._oncreate), callAll(this.root._aftercreate), this.root._lock = !1);
-}function _set(t) {
-  var e = this._state,
-      s = {},
-      n = !1;for (var i in t) this._differs(t[i], e[i]) && (s[i] = n = !0);n && (this._state = assign(assign({}, e), t), this._recompute(s, this._state), this._bind && this._bind(s, this._state), this._fragment && (this.fire("state", { changed: s, current: this._state, previous: e }), this._fragment.p(s, this._state), this.fire("update", { changed: s, current: this._state, previous: e })));
-}function _mount(t, e) {
-  this._fragment[this._fragment.i ? "i" : "m"](t, e || null);
-}function _unmount() {
-  this._fragment && this._fragment.u();
-}function _differs(t, e) {
-  return t != t ? e == e : t !== e || t && "object" == typeof t || "function" == typeof t;
-}function blankObject() {
-  return Object.create(null);
-}function noop() {}assign(PNotifyButtons.prototype, { destroy: destroy, get: get, fire: fire, on: on, set: set, _set: _set, _mount: _mount, _unmount: _unmount, _differs: _differs }), assign(PNotifyButtons.prototype, methods), PNotifyButtons.prototype._recompute = function (t, e) {
-  (t.sticker || t._notice) && this._differs(e._showSticker, e._showSticker = _showSticker(e)) && (t._showSticker = !0), (t.closer || t._notice) && this._differs(e._showCloser, e._showCloser = _showCloser(e)) && (t._showCloser = !0), (t.classes || t._notice) && (this._differs(e._pinUpClass, e._pinUpClass = _pinUpClass(e)) && (t._pinUpClass = !0), this._differs(e._pinDownClass, e._pinDownClass = _pinDownClass(e)) && (t._pinDownClass = !0), this._differs(e._closerClass, e._closerClass = _closerClass(e)) && (t._closerClass = !0));
-}, setup(PNotifyButtons);/* unused harmony default export */ var _unused_webpack_default_export = (PNotifyButtons);
-//# sourceMappingURL=PNotifyButtons.js.map
-
-/***/ }),
-/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14373,55 +14240,7 @@ const BookView = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
 /* harmony default export */ __webpack_exports__["a"] = (BookView);
 
 /***/ }),
-/* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AddBook__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ListBook__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__HomeView__ = __webpack_require__(10);
-
-
-
-
-
-const ContainerView = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
-  el: '#app',
-
-  tabs() {
-    return {
-      el: '#content',
-      tab: {
-        home: __WEBPACK_IMPORTED_MODULE_3__HomeView__["a" /* default */],
-        add: __WEBPACK_IMPORTED_MODULE_1__AddBook__["a" /* default */],
-        list: __WEBPACK_IMPORTED_MODULE_2__ListBook__["a" /* default */]
-      }
-    };
-  },
-
-  render() {
-    $.get('templates/Header.html').then(function (data) {
-      const template = _.template(data, {});
-      $('#header').html(template);
-    });
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = (ContainerView);
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -23870,10 +23689,10 @@ else if(freeModule){// Export for Node.js.
 (freeModule.exports=_)._=_;// Export for CommonJS support.
 freeExports._=_;}else{// Export to the global object.
 root._=_;}}).call(this);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(23)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(16)(module)))
 
 /***/ }),
-/* 23 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = function (module) {
@@ -23898,6 +23717,131 @@ module.exports = function (module) {
 	}
 	return module;
 };
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AddBook__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ListBook__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__HomeView__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__AddUser__ = __webpack_require__(18);
+
+
+
+
+
+
+const ContainerView = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
+  el: '#app',
+
+  tabs() {
+    return {
+      el: '#content',
+      tab: {
+        home: __WEBPACK_IMPORTED_MODULE_3__HomeView__["a" /* default */],
+        addBook: __WEBPACK_IMPORTED_MODULE_1__AddBook__["a" /* default */],
+        list: __WEBPACK_IMPORTED_MODULE_2__ListBook__["a" /* default */],
+        addUser: __WEBPACK_IMPORTED_MODULE_4__AddUser__["a" /* default */]
+      }
+    };
+  },
+
+  render() {
+    $.get('templates/Header.html').then(function (data) {
+      const template = _.template(data, {});
+      $('#header').html(template);
+    });
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (ContainerView);
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_pnotify_dist_es_PNotify_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(24);
+
+
+
+
+const AddUser = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
+
+  events: {
+    'click #userSubmit': 'submitUser'
+  },
+
+  submitUser: e => {
+    e.preventDefault();
+    const formData = $('#addUserForm').serialize();
+    const {
+      password,
+      confirmPassword
+    } = Object(__WEBPACK_IMPORTED_MODULE_2__utils__["a" /* getFieldsFromString */])(formData);
+
+    if (password != confirmPassword) {
+      __WEBPACK_IMPORTED_MODULE_1_pnotify_dist_es_PNotify_js__["a" /* default */].error({
+        title: 'Password mismatch',
+        text: 'The passwords do not match!'
+      });
+    } else {
+      $.post('/addUser', formData, function (data) {
+        if (data.email) {
+          __WEBPACK_IMPORTED_MODULE_1_pnotify_dist_es_PNotify_js__["a" /* default */].success({
+            title: 'Add user confirmation',
+            text: 'User added successfully!'
+          });
+          $('#addUserForm')[0].reset();
+        }
+      });
+    }
+  },
+
+  render() {
+    const el = this.$el;
+    $.get('templates/AddUser.html').then(function (data) {
+      const template = _.template(data, {});
+      el.html(template);
+    });
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (AddUser);
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getFieldsFromString;
+// email=hj&password=n&confirmPassword=j ->
+// { email: hj, password: n, confirmPassword: j }
+function getFieldsFromString(str) {
+  const paramsArray = str.split('&');
+  const params = {};
+
+  for (let p of paramsArray) {
+    const field = p.split('=')[0];
+    params[field] = decodeURIComponent(p.split('=')[1]);
+  }
+  return params;
+}
 
 /***/ })
 /******/ ]);
