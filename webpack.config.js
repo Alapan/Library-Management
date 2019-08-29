@@ -9,7 +9,7 @@ var DEST_DIR = path.resolve(__dirname + '/build');
 module.exports = {
   entry: {
     main: [
-      SRC_DIR + '/views/main.js',
+      SRC_DIR + '/views/Base.js',
       SRC_DIR + '/index.js',
       __dirname + '/scss/main.scss'
     ],
@@ -17,8 +17,7 @@ module.exports = {
       'underscore',
       'tether',
       'bootstrap',
-      'backbone',
-      'pnotify'
+      'backbone'
     ]
   },
   output: {

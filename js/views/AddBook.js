@@ -1,9 +1,8 @@
-import Backbone from 'backbone';
-import BookList from '../collections/BookList';
+import Base from './Base';
+import Books from '../collections/Books';
 import PNotify from 'pnotify/dist/es/PNotify.js';
-import PNotifyButtons from 'pnotify/dist/es/PNotifyButtons.js';
 
-const AddBook = Backbone.View.extend({
+const AddBook = Base.extend({
 
   events: {
     'click #post-book-data': 'postBookData'
@@ -38,7 +37,7 @@ const AddBook = Backbone.View.extend({
     $.get('templates/AddBook.html').then(function(data) {
       const template = _.template(data, {});
       el.html(template);
-    }, 'html');
+    });
   }
 });
 
