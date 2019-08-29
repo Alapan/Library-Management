@@ -1,8 +1,8 @@
-import BaseView from './BaseView';
-import BookList from '../collections/BookList';
+import Base from './Base';
+import Books from '../collections/Books';
 import PNotify from 'pnotify/dist/es/PNotify.js';
 
-const AddBook = BaseView.extend({
+const AddBook = Base.extend({
 
   events: {
     'click #post-book-data': 'postBookData'

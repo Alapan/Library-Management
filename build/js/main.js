@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2013,8 +2013,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
 
 
-const BaseView = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
+const Base = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
   el: '',
+
+  template() {},
 
   initialize(options) {
     this.session = options;
@@ -2030,10 +2032,24 @@ const BaseView = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
     this.childView = new view(this.session);
     this.childView.setElement($(tabs.el));
     this.childView.render();
+  },
+
+  subViews() {},
+
+  render() {
+    this.$el.html(this.template);
+    const subViews = this.subViews();
+    if (subViews) {
+      for (let name in subViews) {
+        const view = new subViews[name].view(this.session);
+        view.setElement = subViews[name].el;
+        view.render();
+      }
+    }
   }
 });
 
-/* harmony default export */ __webpack_exports__["default"] = (BaseView);
+/* harmony default export */ __webpack_exports__["default"] = (Base);
 
 /***/ }),
 /* 2 */
@@ -13464,110 +13480,6 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__collections_BookList__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__ = __webpack_require__(8);
-
-
-
-
-const AddBook = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
-
-  events: {
-    'click #post-book-data': 'postBookData'
-  },
-
-  postBookData(e) {
-    e.preventDefault();
-    const bookList = new __WEBPACK_IMPORTED_MODULE_1__collections_BookList__["a" /* default */]();
-    const name = this.$('#bookName').val().trim();
-    if (name) {
-      bookList.fetch({
-        data: this.$('#bookForm').serialize(),
-        type: 'POST',
-        success: () => {
-          __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__["a" /* default */].success({
-            title: 'Add book',
-            text: 'Book added successfully'
-          });
-        },
-        error: () => {
-          __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__["a" /* default */].error({
-            title: 'Error',
-            text: 'Error: Book could not be added'
-          });
-        }
-      });
-    }
-  },
-
-  render() {
-    const el = this.$el;
-    $.get('templates/AddBook.html').then(function (data) {
-      const template = _.template(data, {});
-      el.html(template);
-    });
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = (AddBook);
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_Book__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_backbone__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_backbone__);
-
-
-
-const BookList = __WEBPACK_IMPORTED_MODULE_1_backbone___default.a.Collection.extend({
-  model: __WEBPACK_IMPORTED_MODULE_0__models_Book__["a" /* default */],
-  url: '/books'
-});
-
-/* harmony default export */ __webpack_exports__["a"] = (BookList);
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
-
-
-const Book = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Model.extend({
-  defaults: {
-    name: ''
-  },
-
-  idAttribute: '_id',
-
-  validate: function (attributes) {
-    if (typeof attributes.firstName != 'string') {
-      return 'First name is mandatory';
-    }
-
-    if (typeof attributes.lastName != 'string') {
-      return 'Last name is mandatory';
-    }
-
-    if (typeof attributes.bookName != 'string') {
-      return 'Please enter a valid book name';
-    }
-  }
-});
-
-/* harmony default export */ __webpack_exports__["a"] = (Book);
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 let PNotify,
     posTimer,
     onDocumentLoaded = () => {
@@ -14006,62 +13918,88 @@ let PNotify,
 //# sourceMappingURL=PNotify.js.map
 
 /***/ }),
-/* 9 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__collections_BookList__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_Book__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__BookView__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Base__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__collections_Books__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__ = __webpack_require__(5);
 
 
 
 
+const AddBook = __WEBPACK_IMPORTED_MODULE_0__Base__["default"].extend({
 
-const ListBook = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
-  initialize(options) {
-    this.bookList = new __WEBPACK_IMPORTED_MODULE_1__collections_BookList__["a" /* default */]();
-    this.constructor.__super__.initialize.call(this, options);
+  events: {
+    'click #post-book-data': 'postBookData'
+  },
+
+  postBookData(e) {
+    e.preventDefault();
+    const bookList = new BookList();
+    const name = this.$('#bookName').val().trim();
+    if (name) {
+      bookList.fetch({
+        data: this.$('#bookForm').serialize(),
+        type: 'POST',
+        success: () => {
+          __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__["a" /* default */].success({
+            title: 'Add book',
+            text: 'Book added successfully'
+          });
+        },
+        error: () => {
+          __WEBPACK_IMPORTED_MODULE_2_pnotify_dist_es_PNotify_js__["a" /* default */].error({
+            title: 'Error',
+            text: 'Error: Book could not be added'
+          });
+        }
+      });
+    }
   },
 
   render() {
     const el = this.$el;
-    const self = this;
-
-    this.bookList.fetch().done(function () {
-      $.get('templates/BookList.html').then(data => {
-        const template = _.template(data, {});
-        el.html(template);
-
-        self.bookList.each(function (book) {
-          const bookView = new __WEBPACK_IMPORTED_MODULE_3__BookView__["a" /* default */]({ model: book });
-          $('#bookList').append(bookView.render().el);
-        });
-      });
+    $.get('templates/AddBook.html').then(function (data) {
+      const template = _.template(data, {});
+      el.html(template);
     });
   }
 });
 
-/* harmony default export */ __webpack_exports__["a"] = (ListBook);
+/* harmony default export */ __webpack_exports__["a"] = (AddBook);
 
 /***/ }),
-/* 10 */
+/* 7 */,
+/* 8 */,
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_pnotify_dist_es_PNotify_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Base__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BookList__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Login__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Menu__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_pnotify_dist_es_PNotify_js__ = __webpack_require__(5);
 const _ = __webpack_require__(15);
 
 
 
-const HomeView = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
+
+
+
+const Home = __WEBPACK_IMPORTED_MODULE_0__Base__["default"].extend({
 
   initialize(options) {
-    HomeView.__super__.initialize.apply(this, arguments);
+    __WEBPACK_IMPORTED_MODULE_0__Base__["default"].prototype.initialize.apply(this, arguments);
     this.parent = options.parent;
   },
+
+  template: _.template(`
+    <div id='menu'></div>
+    <div id='home'></div>
+  `),
 
   events: {
     'click .login-submit': 'submitLogin'
@@ -14079,10 +14017,11 @@ const HomeView = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
       type: 'POST',
       data: formData,
       success: data => {
-        console.log('DATA: ', data);
+        this.session.user = data;
+        this.render();
       },
       error: () => {
-        __WEBPACK_IMPORTED_MODULE_1_pnotify_dist_es_PNotify_js__["a" /* default */].error({
+        __WEBPACK_IMPORTED_MODULE_4_pnotify_dist_es_PNotify_js__["a" /* default */].error({
           title: 'Authentication failed',
           text: 'Username or password is incorrect'
         });
@@ -14090,36 +14029,48 @@ const HomeView = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
     });
   },
 
+  subViews() {
+    return {
+      menu: {
+        el: '#menu',
+        view: __WEBPACK_IMPORTED_MODULE_3__Menu__["a" /* default */]
+      }
+    };
+  },
+
+  tabs() {
+    return {
+      el: '#home',
+      tab: {
+        bookList: __WEBPACK_IMPORTED_MODULE_1__BookList__["a" /* default */],
+        login: __WEBPACK_IMPORTED_MODULE_2__Login__["a" /* default */]
+      }
+    };
+  },
+
   render() {
-    const el = this.$el;
-    let template = '';
-
+    __WEBPACK_IMPORTED_MODULE_0__Base__["default"].prototype.render.apply(this, arguments);
     if (this.session.user) {
-      template = 'home';
+      __WEBPACK_IMPORTED_MODULE_0__Base__["default"].prototype.showTab.call(this, 'bookList');
     } else {
-      template = 'login';
+      __WEBPACK_IMPORTED_MODULE_0__Base__["default"].prototype.showTab.call(this, 'login');
     }
-
-    $.get(`templates/${template}.html`).then(function (data) {
-      const template = _.template(data, {});
-      el.html(template);
-    });
   }
 });
 
-/* harmony default export */ __webpack_exports__["a"] = (HomeView);
+/* harmony default export */ __webpack_exports__["a"] = (Home);
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(1);
-__webpack_require__(12);
-module.exports = __webpack_require__(19);
+__webpack_require__(11);
+module.exports = __webpack_require__(21);
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14128,7 +14079,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router__ = __webpack_require__(12);
 
 
 
@@ -14139,17 +14090,15 @@ __WEBPACK_IMPORTED_MODULE_1_jquery___default()(function () {
 });
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_AddBook__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_ListBook__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_HomeView__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_ContainerView__ = __webpack_require__(17);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__views_AddBook__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_Home__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_Container__ = __webpack_require__(17);
 
 
 
@@ -14165,7 +14114,7 @@ app.router = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Router.extend({
 
   initialize() {
     this.session = {};
-    this.main = new __WEBPACK_IMPORTED_MODULE_4__views_ContainerView__["a" /* default */](this.session);
+    this.main = new __WEBPACK_IMPORTED_MODULE_3__views_Container__["a" /* default */](this.session);
   },
 
   home() {
@@ -14188,6 +14137,39 @@ app.router = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Router.extend({
 /* harmony default export */ __webpack_exports__["a"] = (app.router);
 
 /***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
+
+
+const Book = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Model.extend({
+  defaults: {
+    name: ''
+  },
+
+  idAttribute: '_id',
+
+  validate: function (attributes) {
+    if (typeof attributes.firstName != 'string') {
+      return 'First name is mandatory';
+    }
+
+    if (typeof attributes.lastName != 'string') {
+      return 'Last name is mandatory';
+    }
+
+    if (typeof attributes.bookName != 'string') {
+      return 'Please enter a valid book name';
+    }
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (Book);
+
+/***/ }),
 /* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -14196,7 +14178,7 @@ app.router = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.Router.extend({
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_backbone__);
 
 
-const BookView = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
+const Book = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
 
   tagName: 'tr',
 
@@ -14237,7 +14219,7 @@ const BookView = __WEBPACK_IMPORTED_MODULE_0_backbone___default.a.View.extend({
   }
 });
 
-/* harmony default export */ __webpack_exports__["a"] = (BookView);
+/* harmony default export */ __webpack_exports__["a"] = (Book);
 
 /***/ }),
 /* 15 */
@@ -23723,55 +23705,64 @@ module.exports = function (module) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AddBook__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ListBook__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__HomeView__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Base__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AddBook__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__BookList__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Home__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__AddUser__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Header__ = __webpack_require__(20);
 
 
 
 
 
 
-const ContainerView = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
+
+const Container = __WEBPACK_IMPORTED_MODULE_0__Base__["default"].extend({
   el: '#app',
+
+  template: _.template(`
+    <div id='header'></div>
+    <div id='content'></div>
+  `),
+
+  subViews() {
+    return {
+      header: {
+        el: '#header',
+        view: __WEBPACK_IMPORTED_MODULE_5__Header__["a" /* default */]
+      }
+    };
+  },
 
   tabs() {
     return {
       el: '#content',
       tab: {
-        home: __WEBPACK_IMPORTED_MODULE_3__HomeView__["a" /* default */],
+        home: __WEBPACK_IMPORTED_MODULE_3__Home__["a" /* default */],
         addBook: __WEBPACK_IMPORTED_MODULE_1__AddBook__["a" /* default */],
-        list: __WEBPACK_IMPORTED_MODULE_2__ListBook__["a" /* default */],
+        list: __WEBPACK_IMPORTED_MODULE_2__BookList__["a" /* default */],
         addUser: __WEBPACK_IMPORTED_MODULE_4__AddUser__["a" /* default */]
       }
     };
-  },
-
-  render() {
-    $.get('templates/Header.html').then(function (data) {
-      const template = _.template(data, {});
-      $('#header').html(template);
-    });
   }
 });
 
-/* harmony default export */ __webpack_exports__["a"] = (ContainerView);
+/* harmony default export */ __webpack_exports__["a"] = (Container);
 
 /***/ }),
 /* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BaseView__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_pnotify_dist_es_PNotify_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Base__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_pnotify_dist_es_PNotify_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(19);
 
 
 
 
-const AddUser = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
+const AddUser = __WEBPACK_IMPORTED_MODULE_0__Base__["default"].extend({
 
   events: {
     'click #userSubmit': 'submitUser'
@@ -23816,16 +23807,6 @@ const AddUser = __WEBPACK_IMPORTED_MODULE_0__BaseView__["default"].extend({
 
 /***/ }),
 /* 19 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23842,6 +23823,175 @@ function getFieldsFromString(str) {
   }
   return params;
 }
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Base__ = __webpack_require__(1);
+
+
+const Header = __WEBPACK_IMPORTED_MODULE_0__Base__["default"].extend({
+  template: _.template(`
+    <header>
+      <h1 class="header">Library management system</h1>
+    </header>
+  `)
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (Header);
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__models_Book__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_backbone__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_backbone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_backbone__);
+
+
+
+const Books = __WEBPACK_IMPORTED_MODULE_1_backbone___default.a.Collection.extend({
+  model: __WEBPACK_IMPORTED_MODULE_0__models_Book__["a" /* default */],
+  url: '/books'
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (Books);
+
+/***/ }),
+/* 27 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Base__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__collections_Books__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Book__ = __webpack_require__(14);
+
+
+
+
+const BookList = __WEBPACK_IMPORTED_MODULE_0__Base__["default"].extend({
+  initialize(options) {
+    this.bookList = new __WEBPACK_IMPORTED_MODULE_1__collections_Books__["a" /* default */]();
+    this.constructor.__super__.initialize.call(this, options);
+  },
+
+  template: _.template(`
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Book</th>
+          <th>Author</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="bookList"></tbody>
+    </table>`),
+
+  renderCollection() {
+    const self = this;
+    this.bookList.fetch().done(function () {
+      self.bookList.each(function (book) {
+        const bookView = new __WEBPACK_IMPORTED_MODULE_2__Book__["a" /* default */]({ model: book });
+        $('#bookList').append(bookView.render().el);
+      });
+    });
+  },
+
+  render() {
+    __WEBPACK_IMPORTED_MODULE_0__Base__["default"].prototype.render.apply(this, arguments);
+    this.renderCollection();
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (BookList);
+
+/***/ }),
+/* 28 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Base__ = __webpack_require__(1);
+
+
+const Login = __WEBPACK_IMPORTED_MODULE_0__Base__["default"].extend({
+
+  template: _.template(`
+    <form class="login-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="form-control"
+          placeholder="Type email"/>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="form-control"
+          placeholder="Enter password" />
+      </div>
+      <button
+        type="submit"
+        class="btn btn-success login-submit">
+        Log in
+      </button>
+    </form>
+  `)
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (Login);
+
+/***/ }),
+/* 29 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Base__ = __webpack_require__(1);
+
+
+const Menu = __WEBPACK_IMPORTED_MODULE_0__Base__["default"].extend({
+
+  template: _.template(`
+    <% if (this.session) { %>
+      <ul class="mainmenu">
+        <li>
+          <a href="#/view">View list of books</a>
+        </li>
+        <li>
+          <a href="#/add">Add book</a>
+        </li>
+        <li>
+          <a href="#/user">Add user</a>
+        </li>
+      </ul>
+    <% } %>
+  `),
+
+  render() {
+    this.user = this.session.user;
+    __WEBPACK_IMPORTED_MODULE_0__Base__["default"].prototype.render.apply(this, arguments);
+  }
+});
+
+/* harmony default export */ __webpack_exports__["a"] = (Menu);
 
 /***/ })
 /******/ ]);

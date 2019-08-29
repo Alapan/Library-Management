@@ -12,7 +12,10 @@ module.exports = (app) => {
     const {email, password} = req.body;
     const passwordHash = encryptStringToSha256(password);
     try {
-      const user = await User.findOne({ email, password });
+      const user = await User.findOne({
+        email: email,
+        password: passwordHash
+      });
       if (!user) {
         return res.status(404).send('User not found!');
       }

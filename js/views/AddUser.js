@@ -1,8 +1,8 @@
-import BaseView from './BaseView';
+import Base from './Base';
 import PNotify from 'pnotify/dist/es/PNotify.js';
 import {getFieldsFromString} from '../utils';
 
-const AddUser = BaseView.extend({
+const AddUser = Base.extend({
 
   events: {
     'click #userSubmit': 'submitUser'

@@ -1,6 +1,6 @@
 import Backbone from 'backbone';
 
-const BookView = Backbone.View.extend({
+const Book = Backbone.View.extend({
 
   tagName: 'tr',
 
@@ -41,4 +41,4 @@ const BookView = Backbone.View.extend({
   }
 });
 
-export default BookView;
+export default Book;
