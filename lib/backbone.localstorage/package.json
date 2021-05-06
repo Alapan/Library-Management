@@ -81,7 +81,7 @@
     "mocha": "^3.2.0",
     "sinon": "next",
     "uglify-js": "~1.2.6",
-    "underscore": "1.8.3",
+    "underscore": "1.12.1",
     "webpack": "^2.2.1",
     "window-or-global": "^1.0.1"
   },
